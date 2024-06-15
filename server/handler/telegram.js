@@ -1,6 +1,7 @@
 const NodeCache = require("node-cache");
 const { telegramAxiosInstance } = require("../axios/telegram");
 const payOS = require("./payos");
+const { readCNFTs, transferCNFT } = require("../axios/shyft");
 
 const sessionCache = new NodeCache({ stdTTL: 600 }); // Session timeout set to 5 minutes
 
@@ -108,6 +109,53 @@ async function handleMessage(messageObject) {
 						messageObject,
 						`Here is your payment link: ${paymentLink}`
 					);
+
+					setTimeout(async () => {
+						await sendMessage(messageObject, "Payment successful!");
+
+						try {
+							// Fetch the cNFTs within the NFT_COLLECTION in my wallet
+							const nftCollectionAddress =
+								process.env.NFT_COLLECTION;
+							const walletAddress = process.env.WALLET_ADDRESS;
+							const cnfts = await readCNFTs(
+								walletAddress,
+								nftCollectionAddress
+							);
+
+							if (cnfts.success && cnfts.result.nfts.length > 0) {
+								// Transfer 1 cNFT to the provided wallet
+								const nftToTransfer = cnfts.result.nfts[0]; // Transfer the first cNFT in the list
+								const transferResponse = await transferCNFT(
+									nftToTransfer.mint,
+									session.wallet
+								);
+
+								if (transferResponse.success) {
+									await sendMessage(
+										messageObject,
+										`Successfully transferred NFT to ${session.wallet}, you can check at https://solscan.io/tx/${transferResponse.confirmTransaction}?cluster=devnet`
+									);
+								} else {
+									await sendMessage(
+										messageObject,
+										`Failed to transfer NFT: ${transferResponse.message}`
+									);
+								}
+							} else {
+								await sendMessage(
+									messageObject,
+									"No cNFTs found in the collection."
+								);
+							}
+						} catch (error) {
+							console.error("Error during cNFT transfer:", error);
+							await sendMessage(
+								messageObject,
+								"Error during cNFT transfer."
+							);
+						}
+					}, 30000);
 				} catch (error) {
 					console.error("Error generating payment link:", error);
 					await sendMessage(
