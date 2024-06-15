@@ -1,0 +1,39 @@
+{
+	"name": "SPREE - SVW - Mila",
+	"symbol": "MILA",
+	"description": "An Asian Small Clawed Otter living at Save Vietnam Wildlife center",
+	"seller_fee_basis_points": 100,
+	"image": "https://ipfs.io/ipfs/bafkreihu4jf33xkl4udkavihsuuzljik35vpbqpuhyy6bx2jqcuzs6f3ee",
+	"attributes": [
+		{
+			"trait_type": "Location",
+			"value": "Cuc Phuong National Park, Vietnam"
+		},
+		{
+			"trait_type": "Species",
+			"value": "Aonyx cinerea"
+		},
+		{
+			"trait_type": "Gender",
+			"value": "Female"
+		},
+		{
+			"trait_type": "Rescue Date",
+			"value": "24/3/2023"
+		}
+	],
+	"properties": {
+		"files": [
+			{
+				"uri": "https://ipfs.io/ipfs/bafkreihu4jf33xkl4udkavihsuuzljik35vpbqpuhyy6bx2jqcuzs6f3ee",
+				"type": "image/png"
+			}
+		],
+		"creators": [
+			{
+				"address": "JA6ySU1aLuTzqfGoC1rmpokv7SjMZnrx3Tcg2WfEBh53",
+				"share": 100
+			}
+		]
+	}
+}
